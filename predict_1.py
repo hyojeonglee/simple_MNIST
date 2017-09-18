@@ -57,9 +57,9 @@ def predictint(imvalue):
         sess.run(init_op)
         saver.restore(sess, "./model/model.ckpt")
         #print ("Model restored.")
-   
+        
         prediction=tf.argmax(y,1)
-        return prediction.eval(feed_dict={x: [imvalue]}, session=sess)
+        return prediction.eval(feed_dict={x: [imvalue]}, session=sess), sess.run(y, feed_dict={x: [imvalue]})
 
 
 def imageprepare(argv):
@@ -105,9 +105,16 @@ def main(argv):
     Main function.
     """
     imvalue = imageprepare(argv)
-    predint = predictint(imvalue)
-    print()
-    print ('Prediction is...', predint[0]) #first value in list
+    predint, details = predictint(imvalue)
+
+    print ('\n>>> My Prediction is...', predint[0]) #first value in list
+    print('\n>>> Before argmax')
+    i = 0
+    for firstLine in details:
+        for element in firstLine:
+            print(i, ':', element*1000)
+            i = i+1
+
     
 if __name__ == "__main__":
     main(sys.argv[1])
