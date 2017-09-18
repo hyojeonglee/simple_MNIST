@@ -58,6 +58,8 @@ with tf.Session() as sess:
     for i in range(1000):
         batch_xs, batch_ys = mnist.train.next_batch(100)
         sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+        if i % 10 == 0:
+            print(i, sess.run(cross_entropy, feed_dict={x: batch_xs, y_: batch_ys}))
         
     save_path = saver.save(sess, "./model/model.ckpt")
     print ("Model saved in file: ", save_path)
